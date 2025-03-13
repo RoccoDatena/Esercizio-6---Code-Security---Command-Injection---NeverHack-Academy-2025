@@ -1,15 +1,26 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class InsecureCommandExecutor {
 	public static void executeCommand(String userInput) {
 		String allowedCharacters = "[a-zA-Z0-9.]+"; // lista di caratteri
 		if (userInput.matches(allowedCharacters)) {
 			try {
+				
+				//ProcessBuilder per non usare la shell
+				
+				List<String> commandList = new ArrayList<>();
+                commandList.add("ping");
+                commandList.add("-c");
+                commandList.add("4");
+                commandList.add(userInput);
+                ProcessBuilder processBuilder = new ProcessBuilder(commandList);
+                Process process = processBuilder.start();
 
-				String command = "ping -c 4 " + userInput;
-
-				Process process = Runtime.getRuntime().exec(command);
+                
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 				String line;

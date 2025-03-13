@@ -1,26 +1,30 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 public class InsecureCommandExecutor {
+	private static final Set<String> VALID_INPUTS = new HashSet<>(
+			Arrays.asList("127.0.0.1", "192.168.1.100", "10.0.0.5"));  //Valida il valore dell'input con whitelist
+
 	public static void executeCommand(String userInput) {
 		String allowedCharacters = "[a-zA-Z0-9.]+"; // lista di caratteri
 		if (userInput.matches(allowedCharacters)) {
 			try {
-				
-				//ProcessBuilder per non usare la shell
-				
-				List<String> commandList = new ArrayList<>();
-                commandList.add("ping");
-                commandList.add("-c");
-                commandList.add("4");
-                commandList.add(userInput);
-                ProcessBuilder processBuilder = new ProcessBuilder(commandList);
-                Process process = processBuilder.start();
 
-                
+				// ProcessBuilder per non usare la shell
+
+				List<String> commandList = new ArrayList<>();
+				commandList.add("ping");
+				commandList.add("-c");
+				commandList.add("4");
+				commandList.add(userInput);
+				ProcessBuilder processBuilder = new ProcessBuilder(commandList);
+				Process process = processBuilder.start();
+
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 				String line;
@@ -30,10 +34,11 @@ public class InsecureCommandExecutor {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	} else {
-		System.out.println("Invalid entry");
+		} else {
+			System.out.println("Invalid entry");
+		}
 	}
-	}
+
 	public static void main(String[] args) {
 		if (args.length > 0) {
 			executeCommand(args[0]);

@@ -46,4 +46,3 @@ public class InsecureCommandExecutor {
 			System.out.println("Usage: java InsecureCommandExecutor <IP>");
 		}
 	}
-}
